@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f1019" />
+    <meta
+      name="description"
+      content="A terminal-style local weather forecast powered by wttr.in"
+    />
+    <title>wttr://local — terminal weather</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient--violet"></div>
+    <div class="ambient ambient--cyan"></div>
+
+    <main class="shell" aria-live="polite">
+      <section class="terminal">
+        <div class="terminal__intro">
+          <p><span class="prompt-user">taake@local</span><span class="prompt-separator">:</span><span class="prompt-path">~/weather</span><span class="prompt-symbol">$</span> wttr --geo --interactive</p>
+          <p class="muted">Resolving coordinates and requesting a forecast from wttr.in...</p>
+        </div>
+
+        <form class="command-line" id="location-form">
+          <label class="command-line__prompt" for="location-input">
+            <span class="prompt-user">location</span><span class="prompt-separator">@</span><span class="prompt-path">wttr</span><span class="prompt-symbol">$</span>
+          </label>
+          <input
+            id="location-input"
+            name="location"
+            type="search"
+            autocomplete="off"
+            placeholder="city or coordinates"
+            aria-label="City or coordinates"
+          />
+          <button class="command-button" type="submit">run ↵</button>
+          <button class="icon-button" id="geo-button" type="button" title="Use my location" aria-label="Use my current location">󰍎</button>
+        </form>
+
+        <div class="system-line" id="system-line">
+          <span class="system-line__prefix">[··]</span>
+          <span id="system-message">waiting for geolocation permission</span>
+        </div>
+
+        <section class="dashboard is-loading" id="dashboard">
+          <div class="current-panel panel">
+            <div class="panel__eyebrow">
+              <span>current_condition</span>
+              <span class="live-badge"><i></i> LIVE</span>
+            </div>
+
+            <div class="current-weather">
+              <pre class="weather-art" id="weather-art" aria-hidden="true"></pre>
+              <div class="current-weather__data">
+                <h1 id="location-name">Current location</h1>
+                <p class="condition" id="condition">Loading weather data...</p>
+                <div class="temperature-row">
+                  <span class="temperature" id="temperature">--°</span>
+                  <span class="feels-like" id="feels-like">feels like --°</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="metrics" id="metrics"></div>
+          </div>
+
+          <aside class="location-panel panel">
+            <div class="panel__eyebrow">request_context</div>
+            <dl class="context-list">
+              <div><dt>source</dt><dd>wttr.in / j1</dd></div>
+              <div><dt>query</dt><dd id="query-value">geo:auto</dd></div>
+              <div><dt>updated</dt><dd id="updated-value">--:--</dd></div>
+              <div><dt>units</dt><dd id="units-value">metric</dd></div>
+            </dl>
+            <div class="coordinates" id="coordinates">lat -- · lon --</div>
+          </aside>
+
+          <section class="filter-panel panel">
+            <div class="filter-panel__header">
+              <div>
+                <div class="panel__eyebrow">pipeline / filters</div>
+                <h2>Configure the output</h2>
+              </div>
+              <button class="text-button" id="reset-filters" type="button">reset --all</button>
+            </div>
+
+            <div class="filter-groups">
+              <fieldset class="filter-group">
+                <legend>Period</legend>
+                <div class="segmented" id="period-filter">
+                  <button class="filter-button is-active" data-period="today" type="button">today</button>
+                  <button class="filter-button" data-period="3days" type="button">3 days</button>
+                  <button class="filter-button" data-period="hours" type="button">hourly</button>
+                </div>
+              </fieldset>
+
+              <fieldset class="filter-group">
+                <legend>Conditions</legend>
+                <div class="segmented" id="condition-filter">
+                  <button class="filter-button is-active" data-condition="all" type="button">all</button>
+                  <button class="filter-button" data-condition="rain" type="button">rain</button>
+                  <button class="filter-button" data-condition="clear" type="button">clear</button>
+                  <button class="filter-button" data-condition="wind" type="button">windy</button>
+                </div>
+              </fieldset>
+
+              <fieldset class="filter-group">
+                <legend>Units</legend>
+                <div class="segmented" id="units-filter">
+                  <button class="filter-button is-active" data-units="metric" type="button">°C · km/h</button>
+                  <button class="filter-button" data-units="imperial" type="button">°F · mph</button>
+                </div>
+              </fieldset>
+            </div>
+          </section>
+
+          <section class="forecast-panel panel">
+            <div class="forecast-panel__header">
+              <div>
+                <div class="panel__eyebrow">stdout / forecast</div>
+                <h2 id="forecast-title">Today's forecast</h2>
+              </div>
+              <span class="result-count" id="result-count">0 records</span>
+            </div>
+            <div class="forecast-grid" id="forecast-grid"></div>
+            <div class="empty-state" id="empty-state" hidden>
+              <span>∅</span>
+              <p>No forecast intervals match this filter.</p>
+              <button class="text-button" id="clear-condition" type="button">show --all</button>
+            </div>
+          </section>
+        </section>
+
+        <div class="terminal-footer">
+          <span><b>TIP</b> allow geolocation or enter a city manually</span>
+          <div class="terminal-footer__links">
+            <button class="footer-button" id="about-tab" type="button">help</button>
+            <span class="terminal-clock" id="terminal-clock">--:--</span>
+            <a href="https://wttr.in" target="_blank" rel="noreferrer">powered by wttr.in ↗</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="help-dialog" id="help-dialog">
+      <div class="help-dialog__title">
+        <span>help — wttr://local</span>
+        <button class="icon-button" id="close-help" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="help-dialog__body">
+        <p><span class="prompt-symbol">$</span> Quick commands</p>
+        <dl>
+          <div><dt>search</dt><dd>Enter a city, region, landmark, or coordinates.</dd></div>
+          <div><dt>geo</dt><dd>The 󰍎 button requests your browser coordinates.</dd></div>
+          <div><dt>filters</dt><dd>Select a period, weather type, and unit system.</dd></div>
+        </dl>
+        <p class="muted">The site does not store your coordinates. They are only sent to wttr.in to retrieve the forecast.</p>
+      </div>
+    </dialog>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
