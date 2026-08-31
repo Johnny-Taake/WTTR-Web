@@ -1,10 +1,20 @@
-# wttr://web
+# [wttr://web](https://johnny-taake.github.io/WTTR-Web/)
 
 <p align="center">
-  <img src="./assets/wttr-web-icon.png" alt="wttr://web terminal weather icon" width="144" />
+  <a href="https://johnny-taake.github.io/WTTR-Web/">
+    <img src="./assets/wttr-web-icon.png" alt="wttr://web terminal weather icon" width="144" />
+  </a>
 </p>
 
-A terminal-style weather dashboard powered by [wttr.in](https://wttr.in) and themed after the user's Kitty configuration.
+<p align="center">
+  A terminal-style weather dashboard powered by <a href="https://wttr.in">wttr.in</a> and themed after the user's Kitty configuration.
+  <br />
+  <strong><a href="https://johnny-taake.github.io/WTTR-Web/">Open wttr://web ↗</a></strong>
+</p>
+
+<a href="https://johnny-taake.github.io/WTTR-Web/">
+  <img src="./assets/wttr-web-preview.png" alt="Full-page preview of the wttr://web weather dashboard" />
+</a>
 
 ## Features
 
