@@ -431,6 +431,10 @@ a:focus-visible {
   padding: 24px;
 }
 
+.location-panel__toggle {
+  display: none;
+}
+
 .context-list {
   margin: 0;
 }
@@ -751,6 +755,29 @@ a:focus-visible {
 
 @media (max-width: 620px) {
   .terminal { padding: 18px 13px 24px; }
+  .location-panel__desktop-title { display: none; }
+  .location-panel__toggle {
+    display: flex;
+    width: 100%;
+    margin: 0 0 22px;
+    padding: 0;
+    align-items: center;
+    justify-content: space-between;
+    border: 0;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+  }
+  .location-panel__toggle .panel__eyebrow { margin: 0; }
+  .location-panel__chevron {
+    color: var(--violet);
+    font-size: 16px;
+    line-height: 1;
+    transform: rotate(180deg);
+  }
+  .location-panel.is-collapsed .location-panel__toggle { margin-bottom: 0; }
+  .location-panel.is-collapsed .location-panel__content { display: none; }
+  .location-panel.is-collapsed .location-panel__chevron { transform: none; }
   .command-line {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 40px;

@@ -39,7 +39,7 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260831.7" />
+    <link rel="stylesheet" href="./styles.css?v=20260831.8" />
   </head>
   <body>
     <div class="ambient ambient--violet"></div>
@@ -99,15 +99,21 @@
             <div class="metrics" id="metrics"></div>
           </div>
 
-          <aside class="location-panel panel">
-            <div class="panel__eyebrow">request_context</div>
-            <dl class="context-list">
-              <div><dt>source</dt><dd>wttr.in / j1</dd></div>
-              <div><dt>query</dt><dd id="query-value">geo:auto</dd></div>
-              <div><dt>updated</dt><dd id="updated-value">--:--</dd></div>
-              <div><dt>units</dt><dd id="units-value">metric</dd></div>
-            </dl>
-            <div class="coordinates" id="coordinates">lat -- · lon --</div>
+          <aside class="location-panel panel is-collapsed" id="request-context-panel">
+            <div class="panel__eyebrow location-panel__desktop-title">request_context</div>
+            <button class="location-panel__toggle" id="request-context-toggle" type="button" aria-expanded="false" aria-controls="request-context-content">
+              <span class="panel__eyebrow">request_context</span>
+              <span class="location-panel__chevron" aria-hidden="true">⌄</span>
+            </button>
+            <div class="location-panel__content" id="request-context-content">
+              <dl class="context-list">
+                <div><dt>source</dt><dd>wttr.in / j1</dd></div>
+                <div><dt>query</dt><dd id="query-value">geo:auto</dd></div>
+                <div><dt>updated</dt><dd id="updated-value">--:--</dd></div>
+                <div><dt>units</dt><dd id="units-value">metric</dd></div>
+              </dl>
+              <div class="coordinates" id="coordinates">lat -- · lon --</div>
+            </div>
           </aside>
 
           <section class="filter-panel panel">
@@ -195,6 +201,6 @@
       </div>
     </dialog>
 
-    <script type="module" src="./app.js?v=20260831.7"></script>
+    <script type="module" src="./app.js?v=20260831.8"></script>
   </body>
 </html>

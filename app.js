@@ -29,6 +29,8 @@ const elements = {
   updatedValue: document.querySelector("#updated-value"),
   unitsValue: document.querySelector("#units-value"),
   coordinates: document.querySelector("#coordinates"),
+  requestContextPanel: document.querySelector("#request-context-panel"),
+  requestContextToggle: document.querySelector("#request-context-toggle"),
   forecastTitle: document.querySelector("#forecast-title"),
   forecastGrid: document.querySelector("#forecast-grid"),
   resultCount: document.querySelector("#result-count"),
@@ -416,6 +418,10 @@ elements.locationForm.addEventListener("submit", (event) => {
 });
 
 elements.geoButton.addEventListener("click", requestGeolocation);
+elements.requestContextToggle.addEventListener("click", () => {
+  const isCollapsed = elements.requestContextPanel.classList.toggle("is-collapsed");
+  elements.requestContextToggle.setAttribute("aria-expanded", String(!isCollapsed));
+});
 elements.resetFilters.addEventListener("click", resetFilters);
 elements.clearCondition.addEventListener("click", () => {
   state.condition = "all";
