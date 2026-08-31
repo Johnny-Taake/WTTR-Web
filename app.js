@@ -382,11 +382,4 @@ elements.helpDialog.addEventListener("click", (event) => {
 
 setClock();
 setInterval(setClock, 1000);
-
-if (window.matchMedia("(pointer: coarse)").matches) {
-  elements.dashboard.classList.remove("is-loading");
-  elements.geoButton.classList.add("is-awaiting");
-  setSystemMessage("tap use my location to share your precise position", "loading");
-} else {
-  requestGeolocation();
-}
+requestGeolocation();
