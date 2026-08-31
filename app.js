@@ -335,7 +335,7 @@ function renderForecast() {
           <p class="forecast-card__condition">${escapeHtml(description)}</p>
           <div class="forecast-card__bottom">
             <span class="forecast-card__temp">${escapeHtml(formatTemperature(item))}</span>
-            <span class="forecast-card__rain ${rainChance > 20 ? "is-wet" : ""}"><span class="forecast-card__rain-icon" aria-hidden="true"></span>${rainChance}% · ${escapeHtml(formatWind(item))}</span>
+            <span class="forecast-card__rain ${rainChance > 20 ? "is-wet" : ""}"><svg class="forecast-card__rain-icon" viewBox="0 0 12 16" aria-hidden="true" focusable="false"><path d="M6 0C4.8 2.2 1.5 6.1 1.5 9.4a4.5 4.5 0 0 0 9 0C10.5 6.1 7.2 2.2 6 0Z" /></svg>${rainChance}% · ${escapeHtml(formatWind(item))}</span>
           </div>
         </article>`;
     })

@@ -563,13 +563,11 @@ a:focus-visible {
 
 .forecast-card__rain-icon {
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 9px;
   margin-right: 5px;
-  border-radius: 50% 50% 50% 0;
-  background: currentColor;
-  transform: rotate(-45deg);
-  vertical-align: 1px;
+  fill: currentColor;
+  vertical-align: -1px;
 }
 
 .forecast-card__rain.is-wet { color: var(--cyan); }
