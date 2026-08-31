@@ -186,6 +186,32 @@ a:focus-visible {
   border-color: var(--cyan);
 }
 
+.geo-button svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+}
+
+.geo-button__label {
+  display: none;
+}
+
+.geo-button.is-awaiting {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgb(95 202 216 / 8%);
+}
+
+.geo-button.is-locating svg {
+  animation: locate-pulse 900ms ease-in-out infinite alternate;
+}
+
+@keyframes locate-pulse {
+  to {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+}
+
 .system-line {
   display: flex;
   gap: 10px;
@@ -644,9 +670,18 @@ a:focus-visible {
   .terminal { padding: 18px 13px 24px; }
   .command-line { flex-wrap: wrap; }
   .command-line__prompt { display: none; }
-  .command-line input { min-width: calc(100% - 55px); height: 34px; }
-  .command-button { width: calc(100% - 44px); min-height: 34px; order: 3; }
-  .icon-button { margin-left: auto; }
+  .command-line input { width: 100%; min-width: 100%; height: 34px; }
+  .command-button { width: auto; min-height: 36px; flex: 1; order: 3; }
+  .geo-button {
+    display: flex;
+    width: auto;
+    min-width: 154px;
+    height: 36px;
+    gap: 8px;
+    order: 3;
+    padding: 0 12px;
+  }
+  .geo-button__label { display: inline; }
   .current-weather { align-items: flex-start; gap: 8px; }
   .weather-art { min-width: 105px; font-size: 10px; }
   .current-weather h1 { font-size: 21px; }

@@ -110,26 +110,42 @@ async function loadWeather(query, coords = null) {
 
 function requestGeolocation() {
   if (!navigator.geolocation) {
-    setSystemMessage("geolocation is not supported · loading Bangkok", "error");
-    loadWeather(DEFAULT_LOCATION);
+    setSystemMessage("geolocation is not supported · search for a city manually", "error");
+    elements.dashboard.classList.remove("is-loading");
     return;
   }
 
+  elements.geoButton.disabled = true;
+  elements.geoButton.classList.remove("is-awaiting");
+  elements.geoButton.classList.add("is-locating");
   elements.dashboard.classList.add("is-loading");
-  setSystemMessage("navigator.geolocation.getCurrentPosition()", "loading");
+  setSystemMessage("requesting precise coordinates from the browser", "loading");
 
   navigator.geolocation.getCurrentPosition(
     ({ coords }) => {
       const location = `${coords.latitude.toFixed(4)},${coords.longitude.toFixed(4)}`;
       elements.locationInput.value = "";
-      loadWeather(location, { latitude: coords.latitude, longitude: coords.longitude });
+      elements.geoButton.disabled = false;
+      elements.geoButton.classList.remove("is-locating");
+      loadWeather(location, {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        accuracy: coords.accuracy,
+      });
     },
     (error) => {
-      const reason = error.code === 1 ? "geolocation permission denied" : "coordinates unavailable";
-      setSystemMessage(`${reason} · fallback: ${DEFAULT_LOCATION}`, "error");
-      loadWeather(DEFAULT_LOCATION);
+      const reasons = {
+        1: "location permission denied · enable it in browser settings or search manually",
+        2: "precise location unavailable · tap use my location to retry",
+        3: "location request timed out · tap use my location to retry",
+      };
+      elements.geoButton.disabled = false;
+      elements.geoButton.classList.remove("is-locating");
+      elements.geoButton.classList.add("is-awaiting");
+      elements.dashboard.classList.remove("is-loading");
+      setSystemMessage(reasons[error.code] ?? "unable to retrieve your location", "error");
     },
-    { enableHighAccuracy: false, timeout: 9000, maximumAge: 600000 },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
   );
 }
 
@@ -212,7 +228,7 @@ function renderCurrent() {
   const latitude = state.coords?.latitude ?? area?.latitude;
   const longitude = state.coords?.longitude ?? area?.longitude;
   elements.coordinates.textContent = latitude != null && longitude != null
-    ? `lat ${Number(latitude).toFixed(4)} · lon ${Number(longitude).toFixed(4)}`
+    ? `lat ${Number(latitude).toFixed(4)} · lon ${Number(longitude).toFixed(4)}${state.coords?.accuracy ? ` · ±${Math.round(state.coords.accuracy)} m` : ""}`
     : "coordinates unavailable";
 }
 
@@ -366,4 +382,11 @@ elements.helpDialog.addEventListener("click", (event) => {
 
 setClock();
 setInterval(setClock, 1000);
-requestGeolocation();
+
+if (window.matchMedia("(pointer: coarse)").matches) {
+  elements.dashboard.classList.remove("is-loading");
+  elements.geoButton.classList.add("is-awaiting");
+  setSystemMessage("tap use my location to share your precise position", "loading");
+} else {
+  requestGeolocation();
+}

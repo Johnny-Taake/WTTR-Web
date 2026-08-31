@@ -65,7 +65,12 @@
             aria-label="City or coordinates"
           />
           <button class="command-button" type="submit">run ↵</button>
-          <button class="icon-button" id="geo-button" type="button" title="Use my location" aria-label="Use my current location">󰍎</button>
+          <button class="icon-button geo-button" id="geo-button" type="button" title="Use my location" aria-label="Use my current location">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
+            </svg>
+            <span class="geo-button__label">use my location</span>
+          </button>
         </form>
 
         <div class="system-line" id="system-line">
@@ -182,7 +187,7 @@
         <p><span class="prompt-symbol">$</span> Quick commands</p>
         <dl>
           <div><dt>search</dt><dd>Enter a city, region, landmark, or coordinates.</dd></div>
-          <div><dt>geo</dt><dd>The 󰍎 button requests your browser coordinates.</dd></div>
+          <div><dt>geo</dt><dd>The location button requests precise browser coordinates.</dd></div>
           <div><dt>filters</dt><dd>Select a period, weather type, and unit system.</dd></div>
         </dl>
         <p class="muted">The site does not store your coordinates. They are only sent to wttr.in to retrieve the forecast.</p>
