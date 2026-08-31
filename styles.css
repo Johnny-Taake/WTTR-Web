@@ -299,6 +299,15 @@ a:focus-visible {
   line-height: 1.2;
 }
 
+.weather-symbol--sun {
+  color: var(--yellow);
+  text-shadow: 0 0 14px rgb(229 200 144 / 18%);
+}
+
+.weather-symbol--cloud {
+  color: var(--blue);
+}
+
 .current-weather h1 {
   margin: 0;
   font-size: clamp(22px, 3.2vw, 48px);
@@ -592,10 +601,18 @@ a:focus-visible {
   background: transparent;
   cursor: pointer;
   font: inherit;
+  white-space: nowrap;
 }
 
-.footer-button:hover {
+.terminal-footer a.footer-button {
+  color: var(--violet);
+  text-decoration: none;
+}
+
+.footer-button:hover,
+.terminal-footer a.footer-button:hover {
   color: var(--cyan);
+  text-decoration: none;
 }
 
 .help-dialog {

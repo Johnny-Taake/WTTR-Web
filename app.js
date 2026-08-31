@@ -40,13 +40,39 @@ const elements = {
 };
 
 const weatherArt = {
-  clear: ["    \\   /    ", "     .-.     ", "  ― (   ) ―  ", "     `-’     ", "    /   \\    "].join("\n"),
-  cloudy: ["             ", "     .--.    ", "  .-(    ).  ", " (___.__)__) "].join("\n"),
-  rain: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "   ‘ ‘ ‘ ‘   ", "  ‘ ‘ ‘ ‘    "].join("\n"),
-  storm: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "    ⚡‘ ‘⚡   ", "   ‘ ‘ ‘ ‘   "].join("\n"),
-  snow: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "   *  *  *   ", "  *  *  *    "].join("\n"),
-  mist: ["             ", "  _ - _ - _  ", "   _ - _ -   ", "  _ - _ - _  ", "             "].join("\n"),
+  clear: [
+    [{ text: "    \\   /    ", tone: "sun" }],
+    [{ text: "     .-.     ", tone: "sun" }],
+    [{ text: "  ― (   ) ―  ", tone: "sun" }],
+    [{ text: "     `-’     ", tone: "sun" }],
+    [{ text: "    /   \\    ", tone: "sun" }],
+  ],
+  partlyCloudy: [
+    [{ text: "    \\  /     ", tone: "sun" }],
+    [{ text: "  _ /\"\"", tone: "sun" }, { text: ".-.    ", tone: "cloud" }],
+    [{ text: "    \\_", tone: "sun" }, { text: "(   ).  ", tone: "cloud" }],
+    [{ text: "    /", tone: "sun" }, { text: "(___(__) ", tone: "cloud" }],
+    [{ text: "             " }],
+  ],
+  cloudy: ["             ", "     .--.    ", "  .-(    ).  ", " (___.__)__) "],
+  rain: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "   ‘ ‘ ‘ ‘   ", "  ‘ ‘ ‘ ‘    "],
+  storm: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "    ⚡‘ ‘⚡   ", "   ‘ ‘ ‘ ‘   "],
+  snow: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "   *  *  *   ", "  *  *  *    "],
+  mist: ["             ", "  _ - _ - _  ", "   _ - _ -   ", "  _ - _ - _  ", "             "],
 };
+
+function getWeatherArtMarkup(type) {
+  return weatherArt[type]
+    .map((line) => {
+      const segments = typeof line === "string" ? [{ text: line }] : line;
+      return segments
+        .map(({ text, tone }) => tone
+          ? `<span class="weather-symbol weather-symbol--${tone}">${escapeHtml(text)}</span>`
+          : escapeHtml(text))
+        .join("");
+    })
+    .join("\n");
+}
 
 function setClock() {
   elements.terminalClock.textContent = new Intl.DateTimeFormat("en-GB", {
@@ -161,6 +187,7 @@ function classifyWeather(code, description = "") {
   if ([227, 230, 320, 323, 326, 329, 332, 335, 338, 350, 368, 371].includes(numericCode) || /snow|blizzard/.test(normalized)) return "snow";
   if ([143, 248, 260].includes(numericCode) || /mist|fog/.test(normalized)) return "mist";
   if (numericCode >= 176 && numericCode <= 359 && ![227, 230].includes(numericCode)) return "rain";
+  if ([116].includes(numericCode) || /partly cloudy|partly sunny|variable cloud/.test(normalized)) return "partlyCloudy";
   if ([113].includes(numericCode) || /clear|sunny/.test(normalized)) return "clear";
   return "cloudy";
 }
@@ -200,7 +227,7 @@ function renderCurrent() {
   const type = classifyWeather(current.weatherCode, description);
   const name = getLocationName(state.weather);
 
-  elements.weatherArt.textContent = weatherArt[type];
+  elements.weatherArt.innerHTML = getWeatherArtMarkup(type);
   elements.locationName.textContent = name;
   elements.condition.textContent = description;
   elements.temperature.textContent = formatTemperature(current);
@@ -304,7 +331,7 @@ function renderForecast() {
             <span class="forecast-card__time">${escapeHtml(item.time)}</span>
             <span class="forecast-card__day">${escapeHtml(item.dayLabel)}</span>
           </div>
-          <pre class="forecast-card__art" aria-hidden="true">${weatherArt[type]}</pre>
+          <pre class="forecast-card__art" aria-hidden="true">${getWeatherArtMarkup(type)}</pre>
           <p class="forecast-card__condition">${escapeHtml(description)}</p>
           <div class="forecast-card__bottom">
             <span class="forecast-card__temp">${escapeHtml(formatTemperature(item))}</span>

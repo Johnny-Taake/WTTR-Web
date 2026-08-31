@@ -1,0 +1,83 @@
+WTTR-WEB DESIGN-PROTECTED LICENSE
+Version 1.0, 31 August 2026
+
+Copyright (c) 2026 Johnny-Taake
+
+This is a custom source-available license. It is not an OSI-approved
+open-source license.
+
+1. Definitions
+
+"Software" means the WTTR-Web source code, documentation, and original
+assets distributed with this license, excluding Third-Party Materials.
+
+"Protected Design" means the particular overall visual appearance of the
+original WTTR-Web website, including its combination of terminal-style
+layout, panel composition, color palette, typography, controls, weather
+art, spacing, and original graphical assets. It does not claim ownership
+of generic terminal-interface concepts, individual colors, common UI
+elements, or other ideas that cannot be protected by law.
+
+"Publicly Host" means making a running copy of the Software or a derivative
+work available to the general public over a network. Publishing source code
+in a public repository, and local, private, or internal-network use, are not
+Public Hosting under this license.
+
+"Third-Party Materials" means names, logos, trademarks, service marks,
+code, data, or other materials owned by third parties, including materials
+associated with wttr.in and GitHub Pages.
+
+2. Permission Grant
+
+Subject to the restriction below, permission is granted, free of charge,
+to any person obtaining a copy of the Software to use, copy, modify, merge,
+publish the source code, distribute, sublicense, sell copies of, and create
+derivative works from the Software for commercial or non-commercial
+purposes. Private, local, and internal hosting are permitted.
+
+3. Public Hosting Restriction
+
+You may not Publicly Host the Software or a derivative work while it retains
+the Protected Design or has a substantially similar overall visual
+appearance.
+
+Public Hosting is permitted if the Protected Design has first been replaced
+with an independently created visual design that is not substantially
+similar to the original. Merely changing the project name, text, branding,
+or a few colors is not sufficient when the overall visual appearance remains
+substantially similar.
+
+4. License Notice
+
+A copy of this license and the copyright notice above must be included in
+all copies or substantial portions of the Software and in distributions of
+modified source code.
+
+5. No Trademark or Endorsement Rights
+
+This license does not grant permission to use the names "WTTR-Web",
+"wttr://web", "Johnny-Taake", or related branding in a way that suggests
+endorsement, sponsorship, or that a modified project is the original project.
+
+6. Third-Party Materials
+
+Third-Party Materials are not licensed under this license. They remain the
+property of their respective owners and may be subject to separate terms,
+licenses, and trademark policies.
+
+7. Termination
+
+Your rights under this license terminate automatically if you violate its
+terms. They are reinstated when the violation is fully corrected and any
+publicly hosted prohibited version is removed, unless the copyright holder
+has notified you otherwise in writing.
+
+8. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF,
+OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
