@@ -561,6 +561,17 @@ a:focus-visible {
   font-size: 9px;
 }
 
+.forecast-card__rain-icon {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50% 50% 50% 0;
+  background: currentColor;
+  transform: rotate(-45deg);
+  vertical-align: 1px;
+}
+
 .forecast-card__rain.is-wet { color: var(--cyan); }
 
 .empty-state {
@@ -592,6 +603,8 @@ a:focus-visible {
   display: flex;
   gap: 18px;
   align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .footer-button {
@@ -720,7 +733,7 @@ a:focus-visible {
   .forecast-grid { grid-template-columns: 1fr; }
   .forecast-card { min-height: 165px; }
   .terminal-footer { flex-direction: column; }
-  .terminal-footer__links { justify-content: space-between; }
+  .terminal-footer__links { gap: 12px 18px; justify-content: flex-start; }
 }
 
 @media (prefers-reduced-motion: reduce) {
