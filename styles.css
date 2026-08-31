@@ -681,6 +681,16 @@ a:focus-visible {
   text-decoration: none;
 }
 
+.terminal-footer a.footer-button--accent {
+  color: var(--green);
+  font-weight: 700;
+  text-shadow: 0 0 14px rgb(127 217 163 / 28%);
+}
+
+.is-telegram-mini-app .telegram-app-link {
+  display: none;
+}
+
 .footer-button:hover,
 .terminal-footer a.footer-button:hover {
   color: var(--cyan);

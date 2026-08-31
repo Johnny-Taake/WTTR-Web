@@ -39,13 +39,16 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260831.9" />
+    <link rel="stylesheet" href="./styles.css?v=20260831.10" />
     <script>
-      window.telegramWebAppReady = new Promise((resolve) => {
-        const isTelegramLaunch = /(?:^|[?#&])tgWebAppVersion=/.test(window.location.href)
-          || /Telegram/i.test(navigator.userAgent);
+      window.isTelegramMiniApp = /(?:^|[?#&])tgWebAppVersion=/.test(window.location.href)
+        || /Telegram/i.test(navigator.userAgent);
+      if (window.isTelegramMiniApp) {
+        document.documentElement.classList.add("is-telegram-mini-app");
+      }
 
-        if (!isTelegramLaunch) {
+      window.telegramWebAppReady = new Promise((resolve) => {
+        if (!window.isTelegramMiniApp) {
           resolve(null);
           return;
         }
@@ -209,7 +212,8 @@
         <div class="terminal-footer">
           <span><b>TIP</b> allow geolocation or enter a city manually</span>
           <div class="terminal-footer__links">
-            <a class="footer-button" href="https://github.com/Johnny-Taake/WTTR-Web/blob/master/INSTALL.md" target="_blank" rel="noreferrer">install app</a>
+            <a class="footer-button footer-button--accent" href="https://github.com/Johnny-Taake/WTTR-Web/blob/master/INSTALL.md" target="_blank" rel="noreferrer">install app (iOS)</a>
+            <a class="footer-button footer-button--accent telegram-app-link" href="https://t.me/wttr_web_bot/app" target="_blank" rel="noreferrer">telegram app</a>
             <a class="footer-button" href="https://github.com/Johnny-Taake/WTTR-Web" target="_blank" rel="noreferrer">github repo</a>
             <button class="footer-button" id="about-tab" type="button">help</button>
             <span class="terminal-clock" id="terminal-clock">--:--</span>
