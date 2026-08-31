@@ -110,6 +110,59 @@ a:focus-visible {
   margin: 0;
 }
 
+.terminal__coordinate-status {
+  color: var(--muted);
+}
+
+.terminal__coordinate-loader {
+  display: inline-flex;
+  width: 3ch;
+}
+
+.terminal__coordinate-loader i {
+  font-style: normal;
+  opacity: 0.22;
+  animation: terminal-dot 1.1s ease-in-out infinite;
+}
+
+.terminal__coordinate-loader i:nth-child(2) { animation-delay: 160ms; }
+.terminal__coordinate-loader i:nth-child(3) { animation-delay: 320ms; }
+
+@keyframes terminal-dot {
+  0%, 60%, 100% { opacity: 0.22; }
+  25% { opacity: 1; }
+}
+
+.terminal__coordinate-check,
+.terminal__coordinate-error {
+  display: none;
+  width: 3ch;
+  text-align: center;
+  font-weight: 700;
+}
+
+.terminal__coordinate-status.is-success .terminal__coordinate-loader,
+.terminal__coordinate-status.is-error .terminal__coordinate-loader {
+  display: none;
+}
+
+.terminal__coordinate-status.is-success .terminal__coordinate-check {
+  display: inline-block;
+  color: var(--green);
+  text-shadow: 0 0 10px rgb(127 217 163 / 25%);
+  animation: status-ready 180ms ease-out both;
+}
+
+@keyframes status-ready {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.terminal__coordinate-status.is-error .terminal__coordinate-error {
+  display: inline-block;
+  color: var(--pink);
+}
+
 .prompt-user { color: var(--green); }
 .prompt-separator { color: var(--foreground); }
 .prompt-path { color: var(--blue); }

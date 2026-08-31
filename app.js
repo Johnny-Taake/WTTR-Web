@@ -15,6 +15,8 @@ const elements = {
   locationForm: document.querySelector("#location-form"),
   locationInput: document.querySelector("#location-input"),
   geoButton: document.querySelector("#geo-button"),
+  coordinateStatus: document.querySelector("#coordinate-status"),
+  coordinateStatusMessage: document.querySelector("#coordinate-status-message"),
   systemLine: document.querySelector("#system-line"),
   systemMessage: document.querySelector("#system-message"),
   weatherArt: document.querySelector("#weather-art"),
@@ -89,6 +91,11 @@ function setSystemMessage(message, type = "loading") {
   elements.systemMessage.textContent = message;
 }
 
+function setCoordinateStatus(type, message) {
+  elements.coordinateStatus.className = `terminal__coordinate-status is-${type}`;
+  elements.coordinateStatusMessage.textContent = message;
+}
+
 function unwrapResponse(payload) {
   return payload?.data?.current_condition ? payload.data : payload;
 }
@@ -135,8 +142,11 @@ async function loadWeather(query, coords = null) {
 }
 
 function requestGeolocation() {
+  setCoordinateStatus("loading", "Resolving browser coordinates");
+
   if (!navigator.geolocation) {
-    setSystemMessage("geolocation is not supported · search for a city manually", "error");
+    setCoordinateStatus("error", "Coordinates were not received · geolocation is unsupported");
+    setSystemMessage("enter a city manually to request a forecast", "loading");
     elements.dashboard.classList.remove("is-loading");
     return;
   }
@@ -145,11 +155,12 @@ function requestGeolocation() {
   elements.geoButton.classList.remove("is-awaiting");
   elements.geoButton.classList.add("is-locating");
   elements.dashboard.classList.add("is-loading");
-  setSystemMessage("requesting precise coordinates from the browser", "loading");
+  setSystemMessage("waiting for coordinates before requesting a forecast", "loading");
 
   navigator.geolocation.getCurrentPosition(
     ({ coords }) => {
       const location = `${coords.latitude.toFixed(4)},${coords.longitude.toFixed(4)}`;
+      setCoordinateStatus("success", "Browser coordinates received");
       elements.locationInput.value = "";
       elements.geoButton.disabled = false;
       elements.geoButton.classList.remove("is-locating");
@@ -160,16 +171,20 @@ function requestGeolocation() {
       });
     },
     (error) => {
-      const reasons = {
-        1: "location permission denied · enable it in browser settings or search manually",
-        2: "precise location unavailable · tap use my location to retry",
-        3: "location request timed out · tap use my location to retry",
+      const coordinateMessages = {
+        1: "Coordinates were not received · permission denied",
+        2: "Coordinates were not received · location unavailable",
+        3: "Coordinates were not received · request timed out",
       };
+      setCoordinateStatus(
+        "error",
+        coordinateMessages[error.code] ?? "Coordinates were not received",
+      );
       elements.geoButton.disabled = false;
       elements.geoButton.classList.remove("is-locating");
       elements.geoButton.classList.add("is-awaiting");
       elements.dashboard.classList.remove("is-loading");
-      setSystemMessage(reasons[error.code] ?? "unable to retrieve your location", "error");
+      setSystemMessage("enter a city manually or retry geolocation", "loading");
     },
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
   );
