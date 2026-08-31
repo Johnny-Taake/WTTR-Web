@@ -1,4 +1,4 @@
-# wttr://local
+# wttr-web
 
 A terminal-style weather dashboard powered by [wttr.in](https://wttr.in) and themed after the user's Kitty configuration.
 
