@@ -6,9 +6,33 @@
     <meta name="theme-color" content="#0f1019" />
     <meta
       name="description"
-      content="A terminal-style local weather forecast powered by wttr.in"
+      content="A terminal-style weather dashboard powered by wttr.in"
     />
-    <title>wttr://local — terminal weather</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="wttr://web — terminal weather" />
+    <meta
+      property="og:description"
+      content="A terminal-style weather dashboard powered by wttr.in"
+    />
+    <meta property="og:url" content="https://johnny-taake.github.io/WTTR-Web/" />
+    <meta
+      property="og:image"
+      content="https://johnny-taake.github.io/WTTR-Web/assets/wttr-web-icon.png"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="wttr://web — terminal weather" />
+    <meta
+      name="twitter:description"
+      content="A terminal-style weather dashboard powered by wttr.in"
+    />
+    <meta
+      name="twitter:image"
+      content="https://johnny-taake.github.io/WTTR-Web/assets/wttr-web-icon.png"
+    />
+    <link rel="canonical" href="https://johnny-taake.github.io/WTTR-Web/" />
+    <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
+    <title>wttr://web</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -24,7 +48,7 @@
     <main class="shell" aria-live="polite">
       <section class="terminal">
         <div class="terminal__intro">
-          <p><span class="prompt-user">taake@local</span><span class="prompt-separator">:</span><span class="prompt-path">~/weather</span><span class="prompt-symbol">$</span> wttr --geo --interactive</p>
+          <p><span class="prompt-user">user@web</span><span class="prompt-separator">:</span><span class="prompt-path">~/weather</span><span class="prompt-symbol">$</span> wttr --geo --interactive</p>
           <p class="muted">Resolving coordinates and requesting a forecast from wttr.in...</p>
         </div>
 
@@ -151,7 +175,7 @@
 
     <dialog class="help-dialog" id="help-dialog">
       <div class="help-dialog__title">
-        <span>help — wttr://local</span>
+        <span>help — wttr://web</span>
         <button class="icon-button" id="close-help" type="button" aria-label="Close">×</button>
       </div>
       <div class="help-dialog__body">

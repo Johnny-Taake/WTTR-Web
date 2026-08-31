@@ -1,4 +1,8 @@
-# wttr-web
+# wttr://web
+
+<p align="center">
+  <img src="./assets/wttr-web-icon.png" alt="wttr://web terminal weather icon" width="144" />
+</p>
 
 A terminal-style weather dashboard powered by [wttr.in](https://wttr.in) and themed after the user's Kitty configuration.
 
