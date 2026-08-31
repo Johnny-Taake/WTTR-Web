@@ -149,34 +149,51 @@ async function loadWeather(query, coords = null) {
   }
 }
 
-function requestGeolocation() {
-  setCoordinateStatus("loading", "Resolving browser coordinates");
-
-  if (!navigator.geolocation) {
-    setCoordinateStatus("error", "Coordinates were not received · geolocation is unsupported");
-    setSystemMessage("enter a city manually to request a forecast", "loading");
-    elements.dashboard.classList.remove("is-loading");
-    return;
-  }
-
+function beginGeolocationRequest(source) {
+  setCoordinateStatus("loading", `Resolving ${source} coordinates`);
   elements.geoButton.disabled = true;
   elements.geoButton.classList.remove("is-awaiting");
   elements.geoButton.classList.add("is-locating");
   elements.dashboard.classList.add("is-loading");
   setSystemMessage("waiting for coordinates before requesting a forecast", "loading");
+}
+
+function useCoordinates(coords, source) {
+  const location = `${coords.latitude.toFixed(4)},${coords.longitude.toFixed(4)}`;
+  setCoordinateStatus("success", `${source === "telegram" ? "Telegram" : "Browser"} coordinates received`);
+  elements.locationInput.value = "";
+  elements.geoButton.disabled = false;
+  elements.geoButton.classList.remove("is-locating");
+  loadWeather(location, {
+    latitude: coords.latitude,
+    longitude: coords.longitude,
+    accuracy: coords.accuracy ?? null,
+    source,
+  });
+}
+
+function rejectCoordinates(message) {
+  setCoordinateStatus("error", message);
+  elements.geoButton.disabled = false;
+  elements.geoButton.classList.remove("is-locating");
+  elements.geoButton.classList.add("is-awaiting");
+  elements.dashboard.classList.remove("is-loading");
+  setSystemMessage("enter a city manually or retry geolocation", "loading");
+}
+
+function requestBrowserGeolocation() {
+  if (!navigator.geolocation) {
+    rejectCoordinates("Coordinates were not received · geolocation is unsupported");
+    return;
+  }
 
   navigator.geolocation.getCurrentPosition(
     ({ coords }) => {
-      const location = `${coords.latitude.toFixed(4)},${coords.longitude.toFixed(4)}`;
-      setCoordinateStatus("success", "Browser coordinates received");
-      elements.locationInput.value = "";
-      elements.geoButton.disabled = false;
-      elements.geoButton.classList.remove("is-locating");
-      loadWeather(location, {
+      useCoordinates({
         latitude: coords.latitude,
         longitude: coords.longitude,
         accuracy: coords.accuracy,
-      });
+      }, "browser");
     },
     (error) => {
       const coordinateMessages = {
@@ -184,18 +201,74 @@ function requestGeolocation() {
         2: "Coordinates were not received · location unavailable",
         3: "Coordinates were not received · request timed out",
       };
-      setCoordinateStatus(
-        "error",
+      rejectCoordinates(
         coordinateMessages[error.code] ?? "Coordinates were not received",
       );
-      elements.geoButton.disabled = false;
-      elements.geoButton.classList.remove("is-locating");
-      elements.geoButton.classList.add("is-awaiting");
-      elements.dashboard.classList.remove("is-loading");
-      setSystemMessage("enter a city manually or retry geolocation", "loading");
     },
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
   );
+}
+
+function requestTelegramGeolocation(webApp, userInitiated) {
+  const manager = webApp.LocationManager;
+  let settled = false;
+  const timeout = window.setTimeout(() => {
+    finish(() => rejectCoordinates("Coordinates were not received · Telegram request timed out"));
+  }, 20000);
+
+  const finish = (callback) => {
+    if (settled) return;
+    settled = true;
+    window.clearTimeout(timeout);
+    callback();
+  };
+
+  const getLocation = () => {
+    if (!manager.isLocationAvailable) {
+      finish(() => rejectCoordinates("Coordinates were not received · Telegram location is unavailable"));
+      return;
+    }
+
+    if (userInitiated && manager.isAccessRequested && !manager.isAccessGranted) {
+      finish(() => {
+        manager.openSettings();
+        rejectCoordinates("Allow location in Telegram settings, then retry");
+      });
+      return;
+    }
+
+    manager.getLocation((location) => {
+      if (!location) {
+        finish(() => rejectCoordinates("Coordinates were not received · Telegram permission denied"));
+        return;
+      }
+
+      finish(() => useCoordinates({
+        latitude: location.latitude,
+        longitude: location.longitude,
+        accuracy: location.horizontal_accuracy,
+      }, "telegram"));
+    });
+  };
+
+  if (manager.isInited) getLocation();
+  else manager.init(getLocation);
+}
+
+async function requestGeolocation(userInitiated = false) {
+  beginGeolocationRequest("device");
+  const webApp = await (window.telegramWebAppReady ?? Promise.resolve(null));
+  const supportsTelegramLocation = webApp?.LocationManager
+    && webApp.isVersionAtLeast?.("8.0");
+
+  if (supportsTelegramLocation) {
+    setCoordinateStatus("loading", "Resolving Telegram coordinates");
+    requestTelegramGeolocation(webApp, userInitiated);
+    return;
+  }
+
+  setCoordinateStatus("loading", "Resolving browser coordinates");
+  requestBrowserGeolocation();
 }
 
 function getDescription(item) {
@@ -270,7 +343,7 @@ function renderCurrent() {
     .map(([label, value]) => `<div class="metric"><span class="metric__label">${escapeHtml(label)}</span><span class="metric__value">${escapeHtml(value)}</span></div>`)
     .join("");
 
-  elements.queryValue.textContent = state.coords ? "geo:browser" : state.query;
+  elements.queryValue.textContent = state.coords ? `geo:${state.coords.source ?? "browser"}` : state.query;
   elements.updatedValue.textContent = current.localObsDateTime ?? current.observation_time ?? "now";
   elements.unitsValue.textContent = state.units;
 
@@ -417,7 +490,7 @@ elements.locationForm.addEventListener("submit", (event) => {
   if (value) loadWeather(value);
 });
 
-elements.geoButton.addEventListener("click", requestGeolocation);
+elements.geoButton.addEventListener("click", () => requestGeolocation(true));
 elements.requestContextToggle.addEventListener("click", () => {
   const isCollapsed = elements.requestContextPanel.classList.toggle("is-collapsed");
   elements.requestContextToggle.setAttribute("aria-expanded", String(!isCollapsed));

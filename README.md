@@ -60,10 +60,12 @@ Open the site in Safari, tap the **Share** button, choose **Add to Home Screen**
 `wttr://web` is deliberately backendless: your browser sends forecast requests straight to [wttr.in](https://wttr.in). There is no project server receiving, proxying, storing, or selling your weather queries or coordinates.
 
 - No accounts, cookies, analytics, telemetry, tracking pixels, or statistics collection
-- No application server, database, API keys, Bootstrap, or third-party front-end dependencies
+- No application server, database, API keys, Bootstrap, analytics SDK, or third-party UI framework
 - No ads, paywalls, subscriptions, or commercial monetization — ever
 
 A small, optional donation button may be added later. Donations will never unlock features or change the free experience.
+
+When the site is opened as a Telegram Mini App, it conditionally loads Telegram's official Web App bridge to request device location. The forecast request still goes directly from the Mini App to `wttr.in`; this project does not receive or store the coordinates.
 
 ## With thanks
 

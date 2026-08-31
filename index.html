@@ -39,7 +39,41 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260831.8" />
+    <link rel="stylesheet" href="./styles.css?v=20260831.9" />
+    <script>
+      window.telegramWebAppReady = new Promise((resolve) => {
+        const isTelegramLaunch = /(?:^|[?#&])tgWebAppVersion=/.test(window.location.href)
+          || /Telegram/i.test(navigator.userAgent);
+
+        if (!isTelegramLaunch) {
+          resolve(null);
+          return;
+        }
+
+        let settled = false;
+        const finish = (webApp) => {
+          if (settled) return;
+          settled = true;
+          window.clearTimeout(timeout);
+          resolve(webApp);
+        };
+        const timeout = window.setTimeout(() => finish(null), 5000);
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?63";
+        script.addEventListener("load", () => {
+          const webApp = window.Telegram?.WebApp ?? null;
+          if (webApp) {
+            webApp.ready();
+            webApp.expand();
+            webApp.setHeaderColor?.("#151724");
+            webApp.setBackgroundColor?.("#0f1019");
+          }
+          finish(webApp);
+        });
+        script.addEventListener("error", () => finish(null));
+        document.head.append(script);
+      });
+    </script>
   </head>
   <body>
     <div class="ambient ambient--violet"></div>
@@ -194,13 +228,13 @@
         <p><span class="prompt-symbol">$</span> Quick commands</p>
         <dl>
           <div><dt>search</dt><dd>Enter a city, region, landmark, or coordinates.</dd></div>
-          <div><dt>geo</dt><dd>The location button requests precise browser coordinates.</dd></div>
+          <div><dt>geo</dt><dd>The location button requests device coordinates through Telegram or the browser.</dd></div>
           <div><dt>filters</dt><dd>Select a period, weather type, and unit system.</dd></div>
         </dl>
         <p class="muted">The site does not store your coordinates. They are only sent to wttr.in to retrieve the forecast.</p>
       </div>
     </dialog>
 
-    <script type="module" src="./app.js?v=20260831.8"></script>
+    <script type="module" src="./app.js?v=20260831.9"></script>
   </body>
 </html>
