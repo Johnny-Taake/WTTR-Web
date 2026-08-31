@@ -60,7 +60,13 @@ const weatherArt = {
   rain: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "   ‘ ‘ ‘ ‘   ", "  ‘ ‘ ‘ ‘    "],
   storm: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "    ⚡‘ ‘⚡   ", "   ‘ ‘ ‘ ‘   "],
   snow: ["     .-.     ", "    (   ).   ", "   (___(__)  ", "   *  *  *   ", "  *  *  *    "],
-  mist: ["             ", "  _ - _ - _  ", "   _ - _ -   ", "  _ - _ - _  ", "             "],
+  mist: [
+    [{ text: "             ", tone: "mist" }],
+    [{ text: "  _ - _ - _  ", tone: "mist" }],
+    [{ text: "   _ - _ -   ", tone: "mist" }],
+    [{ text: "  _ - _ - _  ", tone: "mist" }],
+    [{ text: "             ", tone: "mist" }],
+  ],
 };
 
 function getWeatherArtMarkup(type) {
